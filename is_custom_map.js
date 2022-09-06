@@ -263,7 +263,8 @@ function initMap() {
 window.initMap = initMap;
 
 function catName(id, collectionJson = partner_cat) {
-    return partner_cat.find(cat => cat.id == id).name;
+    const cat = partner_cat.find(cat => cat.id == id);
+    return (cat ? cat.name.trim() : '');
 }
 
 function populateList(results, list, currentpage, pagination){
