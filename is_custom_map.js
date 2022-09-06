@@ -194,7 +194,7 @@ function initMap() {
         }
     ];
 
-    const initLatLng = (!isNaN(parseInt(is_map[0].latitude)) && !isNaN(parseInt(is_map[0].longitude))) ? { lat: parseInt(is_map[0].latitude), lng: parseInt(is_map[0].longitude) } : { lat: 43.7182412, lng: -79.3780581 };
+    const initLatLng = (!isNaN(parseInt(partners_json[0]['id'][0].latitude)) && !isNaN(parseInt(partners_json[0]['id'][0].longitude))) ? { lat: parseInt(partners_json[0]['id'][0].latitude), lng: parseInt(partners_json[0]['id'][0].longitude) } : { lat: 43.7182412, lng: -79.3780581 };
     map = new google.maps.Map(
         document.querySelector('[data-is-map]'),
         {
@@ -205,16 +205,16 @@ function initMap() {
         }
     );
 
-    is_map.forEach(function(item) {
-      if(!isNaN(item.latitude) && !isNaN(item.longitude)) {
+    partners_json.forEach(function(item) {
+      if(!isNaN(item['id'][0].latitude) && !isNaN(item['id'][0].longitude)) {
         const marker = new google.maps.Marker({
-            position: { lat: item.latitude, lng: item.longitude },
+            position: { lat: item['id'][0].latitude, lng: item['id'][0].longitude },
             map: map,
             icon: svgMarker,
-            title: item.name
+            title: item['id'][0].name
         });
         const info = new google.maps.InfoWindow({
-          content: '<div data-is-map-infowindow>' + item.name + '</div>',
+          content: '<div data-is-map-infowindow>' + item['id'][0].name + '</div>',
         });
         marker.addListener("click", () => {
             map.setZoom(zoomResult);
@@ -226,7 +226,7 @@ function initMap() {
             });
             const lat = marker.getPosition().lat();
             const lng = marker.getPosition().lng();
-            const filteredList = is_map.filter(item => (item.latitude > lat - 0.003 && item.latitude < lat + 0.003) && (item.longitude > lng - 0.015 && item.longitude < lng + 0.015));
+            const filteredList = partners_json.filter(item => (item['id'][0].latitude > lat - 0.003 && item['id'][0].latitude < lat + 0.003) && (item['id'][0].longitude > lng - 0.015 && item['id'][0].longitude < lng + 0.015));
             buildPages(filteredList);
         });
       }
@@ -253,7 +253,7 @@ function initMap() {
             map.setZoom(zoomResult);
         }
         
-        const filteredList = is_map.filter(item => (item.latitude > lat - 0.003 && item.latitude < lat + 0.003) && (item.longitude > lng - 0.015 && item.longitude < lng + 0.015));
+        const filteredList = partners_json.filter(item => (item['id'][0].latitude > lat - 0.003 && item['id'][0].latitude < lat + 0.003) && (item['id'][0].longitude > lng - 0.015 && item['id'][0].longitude < lng + 0.015));
         buildPages(filteredList);
     });
 
@@ -270,20 +270,20 @@ function populateList(results, list, currentpage, pagination){
         const trimStart = currentpage * pagination;
         const trimEnd = (trimStart + pagination < total) ? trimStart + pagination : total;
         
-        if (mapInit && typeof map.setCenter != undefined && typeof results[trimStart] != undefined && !isNaN(results[trimStart].latitude) && !isNaN(results[trimStart].longitude)) {
-            map.setCenter(new google.maps.LatLng(results[trimStart].latitude, results[trimStart].longitude));
+        if (mapInit && typeof map.setCenter != undefined && typeof results[trimStart]['id'][0] != undefined && !isNaN(results[trimStart]['id'][0].latitude) && !isNaN(results[trimStart]['id'][0].longitude)) {
+            map.setCenter(new google.maps.LatLng(results[trimStart]['id'][0].latitude, results[trimStart]['id'][0].longitude));
         }
 
         for (let i = trimStart; i < trimEnd; i++) {
             let x = document.createElement('div');
             x.setAttribute('data-is-map-list-item', 'true');
-            if(typeof results[i].image != undefined) {
-                x.innerHTML = "<div class=\"is-map__list-item__image\"><img src=\"" + results[i]['image'] + "\" alt=\"" + results[i].image_alt + "\" /></div><div class=\"is-map__list-item__info\"><h3 class=\"blog_title\">" + results[i].name + "</h3><p class=\"text-size-small text-style-allcaps\">" + results[i].category + "</p><p>" + results[i].address + "</p><p class=\"text-listing-discount\"><strong>" + results[i].discount + "</strong></p><div class=\"button_wrapper\"><a href=\"" + results[i].website + "\" target=\"_blank\" class=\"button w-button\">Visit Website</a></div></div></div>";
+            if(typeof results[i]['id'][0].image != undefined) {
+                x.innerHTML = "<div class=\"is-map__list-item__image\"><img src=\"" + results[i]['id'][0]['image'] + "\" alt=\"" + results[i]['id'][0].image_alt + "\" /></div><div class=\"is-map__list-item__info\"><h3 class=\"blog_title\">" + results[i]['id'][0].name + "</h3><p class=\"text-size-small text-style-allcaps\">" + results[i]['id'][0].category + "</p><p>" + results[i]['id'][0].address + "</p><p class=\"text-listing-discount\"><strong>" + results[i]['id'][0].discount + "</strong></p><div class=\"button_wrapper\"><a href=\"" + results[i]['id'][0].website + "\" target=\"_blank\" class=\"button w-button\">Visit Website</a></div></div></div>";
             }
             list.append(x);
             x.addEventListener('click', function handleClick(event) {
-              if(!isNaN(results[i].latitude) && !isNaN(results[i].longitude)) {
-                map.setCenter(new google.maps.LatLng(results[i].latitude, results[i].longitude));
+              if(!isNaN(results[i]['id'][0].latitude) && !isNaN(results[i]['id'][0].longitude)) {
+                map.setCenter(new google.maps.LatLng(results[i]['id'][0].latitude, results[i]['id'][0].longitude));
                 map.setZoom(zoomResult);
               }
             });
@@ -292,7 +292,8 @@ function populateList(results, list, currentpage, pagination){
 }
 
 function buildPages(results, list = $('[data-is-map-list]')) {
-		document.getElementById('is_map_search').value = '';
+	document.getElementById('is_map_search').value = '';
+
     if (typeof results != undefined) {
         const total = results.length;
 
@@ -356,7 +357,7 @@ function buildPages(results, list = $('[data-is-map-list]')) {
 }
 
 $(function() {
-    buildPages(is_map);
+    buildPages(partners_json);
     if (is_map_categories.length > 0) {
         is_map_categories.unshift('Discount');
         is_map_categories.unshift('All');
@@ -372,13 +373,13 @@ $(function() {
             const cat = $(this).attr('data-is-map-filter').replace('&', '&amp;');
             switch (cat) {
                 case 'all':
-                    buildPages(is_map);
+                    buildPages(partners_json);
                     break;
                 case 'discount':
-                    buildPages(is_map.filter(item => typeof item.discount === "string" && item.discount.trim().length !== 0));
+                    buildPages(partners_json.filter(item => typeof item['id'][0].discount === "string" && item['id'][0].discount.trim().length !== 0));
                     break;
                 default:
-                    buildPages(is_map.filter(item => encodeURI(item.category).toLowerCase() == cat));
+                    buildPages(partners_json.filter(item => encodeURI(item['id'][0].category).toLowerCase() == cat));
             }
         });
     }
