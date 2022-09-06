@@ -262,6 +262,10 @@ function initMap() {
 
 window.initMap = initMap;
 
+function catName(id, collectionJson = partner_cat) {
+    return partner_cat.find(cat => cat.id == id).name;
+}
+
 function populateList(results, list, currentpage, pagination){
     list.empty();
     
@@ -278,7 +282,7 @@ function populateList(results, list, currentpage, pagination){
             let x = document.createElement('div');
             x.setAttribute('data-is-map-list-item', 'true');
             if(typeof results[i]['id'][0].image != undefined) {
-                x.innerHTML = "<div class=\"is-map__list-item__image\"><img src=\"" + results[i]['id'][0]['image'] + "\" alt=\"" + results[i]['id'][0].image_alt + "\" /></div><div class=\"is-map__list-item__info\"><h3 class=\"blog_title\">" + results[i]['id'][0].name + "</h3><p class=\"text-size-small text-style-allcaps\">" + results[i]['id'][0].category + "</p><p>" + results[i]['id'][0].address + "</p><p class=\"text-listing-discount\"><strong>" + results[i]['id'][0].discount + "</strong></p><div class=\"button_wrapper\"><a href=\"" + results[i]['id'][0].website + "\" target=\"_blank\" class=\"button w-button\">Visit Website</a></div></div></div>";
+                x.innerHTML = "<div class=\"is-map__list-item__image\"><img src=\"" + results[i]['id'][0]['image'] + "\" alt=\"" + results[i]['id'][0].image_alt + "\" /></div><div class=\"is-map__list-item__info\"><h3 class=\"blog_title\">" + results[i]['id'][0].name + "</h3><p class=\"text-size-small text-style-allcaps\">" + catName(results[i]['id'][0].category) + "</p><p>" + results[i]['id'][0].address + "</p><p class=\"text-listing-discount\"><strong>" + results[i]['id'][0].discount + "</strong></p><div class=\"button_wrapper\"><a href=\"" + results[i]['id'][0].website + "\" target=\"_blank\" class=\"button w-button\">Visit Website</a></div></div></div>";
             }
             list.append(x);
             x.addEventListener('click', function handleClick(event) {
@@ -363,7 +367,7 @@ $(function() {
         partner_cat.unshift({'id': 'all', 'name': 'All'});
 
         for (i = 0; i < partner_cat.length; i++) {
-            $('[data-is-map-filters]').prepend('<span class="guide_listings_form' + ((partner_cat[i].id === 'all') ? ' active' : '') + '" data-is-map-filter="' + partner_cat[i].id + '">' + partner_cat[0].name.trim() + '</span>');
+            $('[data-is-map-filters]').prepend('<span class="guide_listings_form' + ((partner_cat[i].id === 'all') ? ' active' : '') + '" data-is-map-filter="' + partner_cat[i].id + '">' + partner_cat[i].name.trim() + '</span>');
         }
         
         let filters = $('[data-is-map-filter]');
