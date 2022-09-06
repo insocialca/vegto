@@ -194,7 +194,7 @@ function initMap() {
         }
     ];
 
-    const initLatLng = (!isNaN(parseInt(partners_json[0]['id'][0].latitude)) && !isNaN(parseInt(partners_json[0]['id'][0].longitude))) ? { lat: parseInt(partners_json[0]['id'][0].latitude), lng: parseInt(partners_json[0]['id'][0].longitude) } : { lat: 43.7182412, lng: -79.3780581 };
+    const initLatLng = (!isNaN(parseFloat(partners_json[0]['id'][0].latitude)) && !isNaN(parseFloat(partners_json[0]['id'][0].longitude))) ? { lat: parseFloat(partners_json[0]['id'][0].latitude), lng: parseFloat(partners_json[0]['id'][0].longitude) } : { lat: 43.7182412, lng: -79.3780581 };
     map = new google.maps.Map(
         document.querySelector('[data-is-map]'),
         {
@@ -206,9 +206,9 @@ function initMap() {
     );
 
     partners_json.forEach(function(item) {
-      if(!isNaN(item['id'][0].latitude) && !isNaN(item['id'][0].longitude)) {
+      if(!isNaN(parseFloat(item['id'][0].latitude)) && !isNaN(parseFloat(item['id'][0].longitude))) {
         const marker = new google.maps.Marker({
-            position: { lat: item['id'][0].latitude, lng: item['id'][0].longitude },
+            position: { lat: parseFloat(item['id'][0].latitude), lng: parseFloat(item['id'][0].longitude) },
             map: map,
             icon: svgMarker,
             title: item['id'][0].name
@@ -226,7 +226,7 @@ function initMap() {
             });
             const lat = marker.getPosition().lat();
             const lng = marker.getPosition().lng();
-            const filteredList = partners_json.filter(item => (item['id'][0].latitude > lat - 0.003 && item['id'][0].latitude < lat + 0.003) && (item['id'][0].longitude > lng - 0.015 && item['id'][0].longitude < lng + 0.015));
+            const filteredList = partners_json.filter(item => (parseFloat(item['id'][0].latitude) > lat - 0.003 && parseFloat(item['id'][0].latitude) < lat + 0.003) && (parseFloat(item['id'][0].longitude) > lng - 0.015 && parseFloat(item['id'][0].longitude) < lng + 0.015));
             buildPages(filteredList);
         });
       }
@@ -253,7 +253,7 @@ function initMap() {
             map.setZoom(zoomResult);
         }
         
-        const filteredList = partners_json.filter(item => (item['id'][0].latitude > lat - 0.003 && item['id'][0].latitude < lat + 0.003) && (item['id'][0].longitude > lng - 0.015 && item['id'][0].longitude < lng + 0.015));
+        const filteredList = partners_json.filter(item => (parseFloat(item['id'][0].latitude) > lat - 0.003 && parseFloat(item['id'][0].latitude) < lat + 0.003) && (parseFloat(item['id'][0].longitude) > lng - 0.015 && parseFloat(item['id'][0].longitude) < lng + 0.015));
         buildPages(filteredList);
     });
 
@@ -270,8 +270,8 @@ function populateList(results, list, currentpage, pagination){
         const trimStart = currentpage * pagination;
         const trimEnd = (trimStart + pagination < total) ? trimStart + pagination : total;
         
-        if (mapInit && typeof map.setCenter != undefined && typeof results[trimStart]['id'][0] != undefined && !isNaN(results[trimStart]['id'][0].latitude) && !isNaN(results[trimStart]['id'][0].longitude)) {
-            map.setCenter(new google.maps.LatLng(results[trimStart]['id'][0].latitude, results[trimStart]['id'][0].longitude));
+        if (mapInit && typeof map.setCenter != undefined && typeof results[trimStart]['id'][0] != undefined && !isNaN(parseFloat(results[trimStart]['id'][0].latitude)) && !isNaN(parseFloat(results[trimStart]['id'][0].longitude))) {
+            map.setCenter(new google.maps.LatLng(parseFloat(results[trimStart]['id'][0].latitude), parseFloat(results[trimStart]['id'][0].longitude)));
         }
 
         for (let i = trimStart; i < trimEnd; i++) {
@@ -282,8 +282,8 @@ function populateList(results, list, currentpage, pagination){
             }
             list.append(x);
             x.addEventListener('click', function handleClick(event) {
-              if(!isNaN(results[i]['id'][0].latitude) && !isNaN(results[i]['id'][0].longitude)) {
-                map.setCenter(new google.maps.LatLng(results[i]['id'][0].latitude, results[i]['id'][0].longitude));
+              if(!isNaN(parseFloat(results[i]['id'][0].latitude)) && !isNaN(parseFloat(results[i]['id'][0].longitude))) {
+                map.setCenter(new google.maps.LatLng(parseFloat(results[i]['id'][0].latitude), parseFloat(results[i]['id'][0].longitude)));
                 map.setZoom(zoomResult);
               }
             });
