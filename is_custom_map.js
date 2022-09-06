@@ -359,11 +359,11 @@ function buildPages(results, list = $('[data-is-map-list]')) {
 $(function() {
     buildPages(partners_json);
     if (partner_cat.length > 0) {
-        is_map_categories.unshift({'id': 'discount', 'name': 'Discount'});
-        is_map_categories.unshift({'id': 'all', 'name': 'All'});
+        partner_cat.unshift({'id': 'discount', 'name': 'Discount'});
+        partner_cat.unshift({'id': 'all', 'name': 'All'});
 
-        for (i = 0; i < is_map_categories.length; i++) {
-            $('[data-is-map-filters]').prepend('<span class="guide_listings_form' + ((partner_cat[i].id === 'all') ? ' active' : '') + '" data-is-map-filter="' + partner_cat[i].id + '">' + is_map_categories[i].trim() + '</span>');
+        for (i = 0; i < partner_cat.length; i++) {
+            $('[data-is-map-filters]').prepend('<span class="guide_listings_form' + ((partner_cat[i].id === 'all') ? ' active' : '') + '" data-is-map-filter="' + partner_cat[i].id + '">' + partner_cat[0].name.trim() + '</span>');
         }
         
         let filters = $('[data-is-map-filter]');
